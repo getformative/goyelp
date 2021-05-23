@@ -1,4 +1,4 @@
-package yelpsdk_test
+package goyelp_test
 
 import (
 	"fmt"
@@ -8,7 +8,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/getformative/yelpsdk"
+	"github.com/getformative/goyelp"
 )
 
 type YelpSDKTestCase struct{}
@@ -26,11 +26,11 @@ func TestYelpSearch(t *testing.T) {
 		}),
 	)
 	defer server.Close()
-	sdk, err := yelpsdk.NewYelpSDK(server.URL, "test-api-key")
+	sdk, err := goyelp.NewYelpSDK(server.URL, "test-api-key")
 	if err != nil {
 		t.Fatal(err)
 	}
-	_, err = sdk.BusinessSearch(yelpsdk.YelpBusinessSearchParameters{
+	_, err = sdk.BusinessSearch(goyelp.YelpBusinessSearchParameters{
 		Latitude:  46.0,
 		Longitude: -110.9,
 		Radius:    39000,
@@ -45,13 +45,13 @@ func TestBusinessSearchIntegration(t *testing.T) {
 	if testing.Short() {
 		t.Skip()
 	}
-	sdk, err := yelpsdk.NewYelpSDK("https://api.yelp.com/v3", os.Getenv("YELP_KEY"))
+	sdk, err := goyelp.NewYelpSDK("https://api.yelp.com/v3", os.Getenv("YELP_KEY"))
 	if err != nil {
 		t.Fatal(err)
 	}
 	const limit = 10
 	results, err := sdk.BusinessSearch(
-		yelpsdk.YelpBusinessSearchParameters{
+		goyelp.YelpBusinessSearchParameters{
 			Latitude:  40.7608,
 			Longitude: -111.8910,
 			Radius:    2000,

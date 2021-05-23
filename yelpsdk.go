@@ -1,4 +1,4 @@
-package yelpsdk
+package goyelp
 
 import "errors"
 
