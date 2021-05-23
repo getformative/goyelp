@@ -119,7 +119,7 @@ func (y *YelpBusinessSearchResult) String() string {
 
 // Business is a yelp business
 type Business struct {
-	Rating       int          `json:"rating"`
+	Rating       float32      `json:"rating"`
 	Price        string       `json:"price"`
 	Phone        string       `json:"phone"`
 	ID           string       `json:"id"`
