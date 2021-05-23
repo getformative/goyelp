@@ -27,7 +27,7 @@ jobs:
         run: |
           mkdir -p coverage/
           go get
-          go install github.com/jandelgado/gcov2lcov
+          go install github.com/jandelgado/gcov2lcov@latest
           go test -coverprofile=coverage/coverage.out ./...
           go tool cover -html=coverage/coverage.out -o coverage/coverage.html
           gcov2lcov -infile=coverage/coverage.out -outfile=coverage/coverage.lcov -use-absolute-source-path

@@ -22,7 +22,7 @@ func TestYelpSearch(t *testing.T) {
 			if err != nil {
 				t.Fatal(err)
 			}
-			w.Write(data)
+			_, _ = w.Write(data)
 		}),
 	)
 	defer server.Close()

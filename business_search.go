@@ -41,7 +41,10 @@ func (y *YelpSDK) BusinessSearch(parameters YelpBusinessSearchParameters) (*Yelp
 	client := y.getYelpClient()
 	url := fmt.Sprintf("%v?%v", endpoint, qs)
 	req, err := http.NewRequest("GET", url, nil)
-	req.Header.Add(http.CanonicalHeaderKey("authorization"), fmt.Sprintf("Bearer %v", y.APIKey))
+	if err != nil {
+		return nil, errors.New("there was an error during the http request")
+	}
+	req.Header.Add("Authorization", fmt.Sprintf("Bearer %v", y.APIKey))
 	res, err := client.Do(req)
 	if res.Body != nil {
 		defer res.Body.Close()
@@ -53,9 +56,12 @@ func (y *YelpSDK) BusinessSearch(parameters YelpBusinessSearchParameters) (*Yelp
 		return nil, errors.New("something went wrong while making the request")
 	}
 	body, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		return nil, err
+	}
 	var yelpResponse YelpBusinessSearchResult
 
-	json.Unmarshal(body, &yelpResponse)
+	err = json.Unmarshal(body, &yelpResponse)
 	if err != nil {
 		return nil, err
 	}
