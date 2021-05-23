@@ -49,12 +49,14 @@ func TestBusinessSearchIntegration(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	fmt.Println(sdk)
+	const limit = 10
 	results, err := sdk.BusinessSearch(
 		yelpsdk.YelpBusinessSearchParameters{
 			Latitude:  40.7608,
 			Longitude: -111.8910,
 			Radius:    2000,
+			Limit:     limit,
+			Offset:    0,
 		},
 	)
 
@@ -62,4 +64,7 @@ func TestBusinessSearchIntegration(t *testing.T) {
 		t.Fatal(err)
 	}
 	t.Logf("Yelp SDK search results: %v", results)
+	if got, wanted := len(results.Businesses), limit; got != wanted {
+		t.Errorf("Something may be wrong: got %v businesses, but wanted %v", got, wanted)
+	}
 }
