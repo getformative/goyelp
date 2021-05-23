@@ -1,0 +1,42 @@
+name: Test Yelp SDK
+on: push
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-go@v2
+        with:
+          go-version: "^1.16.3"
+      - uses: actions/checkout@v2
+      - name: Lint
+        uses: golangci/golangci-lint-action@v2
+        with:
+          version: v1.40
+          working-directory: gomatch
+      - name: static check
+        run: go install honnef.co/go/tools/cmd/staticcheck@latest && cd gomatch && staticcheck ./...
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-go@v2
+        with:
+          go-version: "^1.16.4"
+      - uses: actions/checkout@v2
+      - name: Unit & Integration tests
+        run: |
+          mkdir -p coverage/
+          go get
+          go install github.com/jandelgado/gcov2lcov
+          go test -coverprofile=coverage/coverage.out ./...
+          go tool cover -html=coverage/coverage.out -o coverage/coverage.html
+          gcov2lcov -infile=coverage/coverage.out -outfile=coverage/coverage.lcov -use-absolute-source-path
+        env:
+          YELP_KEY: "${{ secrets.YELP_KEY }}"
+      - name: Coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path-to-lcov: coverage/coverage.lcov
+      - name: Build
+        run: cd gomatch && go build .
