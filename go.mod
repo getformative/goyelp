@@ -1,4 +1,4 @@
-module github.com/getformative/yelpsdk
+module github.com/getformative/goyelp
 
 go 1.16
 
